@@ -37,8 +37,12 @@ import {
 import { 
   NavigationContainer 
 } from '@react-navigation/native';
-import Home from './android/app/src/wallet/screens/Home';
 import store from './redux/store';
+import Home from './android/app/src/wallet/components/Home/Tab';
+import MyTab from './android/app/src/wallet/components/Home/Tab';
+import Cards from './android/app/src/wallet/screens/Cards';
+import WelcomeScreen from './android/app/src/wallet/screens/WelcomeScreen';
+import Registration from './android/app/src/wallet/screens/Registration';
 
 function App(){
 
@@ -51,30 +55,26 @@ function App(){
       <NavigationContainer>
         
         {/* <FlashMessage position="top" backgroundColor="red" />  */}
+
         <Stack.Navigator>
-          <Stack.Screen name={'user-home'} options={{
-            title: 'Home',
-            headerTitleStyle: {
-            fontWeight: 'bold',
-            fontFamily: 'serif',
-            display: 'flex',
-            width: '100%',
-            height: 80,
-            padding: 0,
-            margin: 0,
-            
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: '#000',
-            backgroundColor: 'green'
-            
-            },
-            
-            
-            
-          }} component={Home} /> 
+          <Stack.Screen name={'user-registration'} options={{
+ 
+            header: ({navigation}) =>
+            (
+                <View style={{ height: 100, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#007FFF', alignItems: 'center', justifyContent: 'center'}}>
+                  
+                
+                </View>
+            ),
+                        
+                        
+          }} component={Registration} />  
         </Stack.Navigator>
+
+        {/* <MyTab /> */}
+
         
+
 
         
       </NavigationContainer>

@@ -1,16 +1,13 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-export default function BalanceLabel() {
+export default function AddMoney() {
   return (
     <>
-
         <View>
-            <Text>
-                Current Balance
-            </Text>
+            <View></View>
+            <Text>Add Money</Text>
         </View>
-      
     </>
   )
 }
