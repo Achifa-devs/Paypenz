@@ -10,7 +10,7 @@ import ApperanceSvg from '../../wallet/assets/contrast-907-svgrepo-com.svg'
 import AngleSvg from '../../wallet/assets/angle-right-svgrepo-com.svg'
 import RatingSvg from '../../wallet/assets/star-rating-svgrepo-com (1).svg'
 
-export default function Setting() {
+export default function Setting({navigation}) {
     return (
         <>
             <View style={styles.cnt} >
@@ -19,7 +19,7 @@ export default function Setting() {
                 <ScrollView >
                     <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: .5, paddingBottom: 10, marginBottom: 10, marginTop: 25}]}>General</Text>
 
-                    <TouchableOpacity onPress={e => navigation.navigate('user-data')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                    <TouchableOpacity onPress={e => navigation.navigate('user-settings-1')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                                 <ShieldSvg width={25} height={25} />

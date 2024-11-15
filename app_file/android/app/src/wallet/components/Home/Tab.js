@@ -38,6 +38,13 @@ import { useNavigationState } from '@react-navigation/native';
 import PersonalData from '../../screens/PersonalData';
 import Invite from '../../screens/Invite';
 import Setting from '../../screens/Setting';
+import AccountSecurity from '../../screens/Settings/AccountSecurity&Privacy';
+import ChangeEmail from '../../screens/Settings/AccountSecurity/ChangeEmail';
+import ChangePhone from '../../screens/Settings/AccountSecurity/ChangePhone';
+import ChangePwd from '../../screens/Settings/AccountSecurity/ChangePwd';
+import Verification from '../../screens/Settings/AccountSecurity/Verification';
+import Logout from '../../screens/Settings/AccountSecurity/Logout';
+import ConnectedServices from '../../screens/Settings/AccountSecurity/ConnectedServices';
 // import { ws } from '../../../../../utils/socket';
 // import Icon from 'react-native-vector-icons/Ionicons';
 const Tab = createBottomTabNavigator();
@@ -486,6 +493,125 @@ function MeStackScreen() {
         }}  name="user-setting" component={Setting} />
 
 
-    </MeStack.Navigator>
+        <MeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-settings-1" component={AccountSecurity} />
+
+        <MeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-settings-1-email" component={ChangeEmail} />
+
+        <MeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-settings-1-phone" component={ChangePhone} />
+
+        <MeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-settings-1-password" component={ChangePwd} />
+
+        <MeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-settings-1-verification" component={Verification} />
+
+        <MeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-settings-1-logout" component={Logout} />
+
+        <MeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-settings-1-connected-services" component={ConnectedServices} />
+
+    </MeStack.Navigator> 
   );
 }   
