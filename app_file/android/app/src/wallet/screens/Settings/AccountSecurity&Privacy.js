@@ -42,7 +42,8 @@ export default function AccountSecurity({navigation}) {
 
     return (
     <>
-        <View style={styles.cnt} >
+        <View style={styles.cnt}>
+
             <Text style={{fontSize: 30, color: '#000', fontWeight: '600', height: 60, backgroundColor: '#fff'}}>Account Security & Privacy</Text>
  
             <ScrollView >
@@ -121,7 +122,7 @@ export default function AccountSecurity({navigation}) {
 
 
 
-                <TouchableOpacity onPress={e => navigation.navigate('user-settings-1-verification')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
+                {/* <TouchableOpacity onPress={e => navigation.navigate('user-settings-1-verification')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                     <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
                         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 10}}>
                             <FaSvg width={25} height={25} />
@@ -133,7 +134,7 @@ export default function AccountSecurity({navigation}) {
                         <AngleSvg width={35} height={35} />
                     </View>
                     
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity onPress={e => navigation.navigate('user-settings-1-logout')} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginBottom: 0, flexDirection: 'row', borderTopLeftRadius: 10, borderTopRightRadius: 10, height: 75, width: '100%', backgroundColor: '#fff'}}>
                     <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>

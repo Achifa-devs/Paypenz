@@ -45,6 +45,8 @@ import ChangePwd from '../../screens/Settings/AccountSecurity/ChangePwd';
 import Verification from '../../screens/Settings/AccountSecurity/Verification';
 import Logout from '../../screens/Settings/AccountSecurity/Logout';
 import ConnectedServices from '../../screens/Settings/AccountSecurity/ConnectedServices';
+import Notification from '../../screens/Settings/Notification';
+import ExchangeAlert from '../../screens/Settings/ExchangeAlert';
 // import { ws } from '../../../../../utils/socket';
 // import Icon from 'react-native-vector-icons/Ionicons';
 const Tab = createBottomTabNavigator();
@@ -440,7 +442,6 @@ function MeStackScreen() {
             // headerShown: false, 
         }}  name="user-profile" component={Me} />
 
-        
         <MeStack.Screen  options={{
                 header: ({navigation}) =>
                 (
@@ -611,6 +612,40 @@ function MeStackScreen() {
                 ),
             // headerShown: false, 
         }}  name="user-settings-1-connected-services" component={ConnectedServices} />
+
+        <MeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-settings-2" component={Notification} />
+
+        <MeStack.Screen  options={{
+                header: ({navigation}) =>
+                (
+
+                    <>
+                        <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 15, paddingRight: 25}}>
+                            <TouchableOpacity style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', backgroundColor: '#efefef', marginRight: 15, borderRadius: 50, padding: 5}}>
+                                <BackSvg width={22} height={22} />
+                            </TouchableOpacity>
+                            
+                        </View>
+                       
+                    </>
+                ),
+            // headerShown: false, 
+        }}  name="user-settings-3" component={ExchangeAlert} />
 
     </MeStack.Navigator> 
   );

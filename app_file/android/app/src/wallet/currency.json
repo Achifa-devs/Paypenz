@@ -1,0 +1,103 @@
+[
+    {
+        "id": "1", 
+        "country": "Nigeria",
+        "flag_url": "https://flagcdn.com/w320/ng.png",
+        "currency": {
+            "rate": "",
+            "name": "Naira",
+            "abbreviation": "NGN"
+        }
+    },
+    {
+        "id": "2", 
+        "country": "United States",
+        "flag_url": "https://flagcdn.com/w320/us.png",
+        "currency": {
+            "rate": "",
+            "name": "Dollar",
+            "abbreviation": "USD"
+        }
+    },
+    {
+        "id": "3", 
+        "country": "United Kingdom",
+        "flag_url": "https://flagcdn.com/w320/gb.png",
+        "currency": {
+            "rate": "",
+            "name": "Pound Sterling",
+            "abbreviation": "GBP"
+        }
+    },
+    {
+        "id": "4", 
+        "country": "Canada",
+        "flag_url": "https://flagcdn.com/w320/ca.png",
+        "currency": {
+            "rate": "",
+            "name": "Canadian Dollar",
+            "abbreviation": "CAD"
+        }
+    },
+    {
+        "id": "5", 
+        "country": "Japan",
+        "flag_url": "https://flagcdn.com/w320/jp.png",
+        "currency": {
+            "rate": "",
+            "name": "Yen",
+            "abbreviation": "JPY"
+        }
+    },
+    {
+        "id": "6", 
+        "country": "India",
+        "flag_url": "https://flagcdn.com/w320/in.png",
+        "currency": {
+            "rate": "",
+            "name": "Indian Rupee",
+            "abbreviation": "INR"
+        }
+    },
+    {
+        "id": "7", 
+        "country": "Germany",
+        "flag_url": "https://flagcdn.com/w320/de.png",
+        "currency": {
+            "rate": "",
+            "name": "Euro",
+            "abbreviation": "EUR"
+        }
+    },
+    {
+        "id": "8", 
+        "country": "China",
+        "flag_url": "https://flagcdn.com/w320/cn.png",
+        "currency": {
+            "rate": "",
+            "name": "Yuan Renminbi",
+            "abbreviation": "CNY"
+        }
+    },
+    {
+        "id": "9", 
+        "country": "Brazil",
+        "flag_url": "https://flagcdn.com/w320/br.png",
+        "currency": {
+            "rate": "",
+            "name": "Real",
+            "abbreviation": "BRL"
+        }
+    },
+    {
+        "id": "10", 
+        "country": "Australia",
+        "flag_url": "https://flagcdn.com/w320/au.png",
+        "currency": {
+            "rate": "",
+            "name": "Australian Dollar",
+            "abbreviation": "AUD"
+        }
+    }
+  ]
+  
