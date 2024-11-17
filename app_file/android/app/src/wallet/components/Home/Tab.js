@@ -18,6 +18,7 @@ import {
     useDispatch, 
     useSelector 
 } from 'react-redux';
+
 import BackSvg from '../../assets/back-svgrepo-com (4).svg'
 import BellSvg from '../../assets/notification-svgrepo-com (1).svg'
 import SettingSvg from '../../assets/settings-svgrepo-com (8).svg'
@@ -180,6 +181,8 @@ const HomeStack = createNativeStackNavigator();
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
+
+        
         <HomeStack.Screen  options={{
                 header: ({navigation}) =>
                 (

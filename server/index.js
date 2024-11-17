@@ -9,11 +9,12 @@ const {
   shortId,
   jwt,
   io
-} = require('./modules');
+} = require('./reusables/modules');
 
 const {
-  NeonDB
-} = require('./db');
+  // NeonDB,
+  neon_db
+} = require('./reusables/db');
 
 const cookieParser = require('cookie-parser');
 const greetingTime = require("greeting-time");

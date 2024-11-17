@@ -10,27 +10,13 @@ import SyncSvg from '../../../wallet/assets/add-contact-svgrepo-com.svg'
 import InfoSvg from '../../../wallet/assets/info-circle-svgrepo-com.svg'
 import AngleSvg from '../../../wallet/assets/angle-right-svgrepo-com.svg'
 import LinkSvg from '../../../wallet/assets/link-square-svgrepo-com (1).svg'
-import InAppBrowser from 'react-native-inappbrowser-reborn';
+// import InAppBrowser from 'react-native-inappbrowser-reborn';
 export default function AccountSecurity({navigation}) {
 
     const openInAppBrowser = async () => {
         const url = 'https://www.example.com';
     
-        if (await InAppBrowser.isAvailable()) {
-          InAppBrowser.open(url, {
-            // Customization options
-            dismissButtonStyle: 'cancel',
-            preferredBarTintColor: '#6200EE',
-            preferredControlTintColor: 'white',
-            readerMode: false,
-            animated: true,
-            modalPresentationStyle: 'fullScreen',
-            enableBarCollapsing: true,
-          });
-        } else {
-          // Fallback to Linking if InAppBrowser is unavailable
-          Linking.openURL(url);
-        }
+      
     };
     
 

@@ -4,7 +4,44 @@ import CloseSVG from '../../../wallet/assets/close-square-svgrepo-com.svg'
 import ExchangeSvg from '../../../wallet/assets/exchange-2-svgrepo-com.svg'
 import currency from '../../currency.json'
 import axios from 'axios'
+import {
+    LineChart,
+    BarChart,
+    PieChart,
+    ProgressChart,
+    ContributionGraph,
+    StackedBarChart
+  } from "react-native-chart-kit";
+import { Dimensions } from "react-native";
+
 export default function ExchangeAlert() {
+
+    const screenWidth = Dimensions.get("window").width;
+    const [updated_rate_data, set_updated_rate_data] = useState([5,2,6,4,1,2,5]);
+    const [rate_data, set_rate_data] = useState([]);
+
+    const data = {
+        labels: ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"],
+        datasets: [
+          {
+            data: updated_rate_data,
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // optional
+            strokeWidth: 2 // optional
+          }
+        ]
+    };
+
+    const chartConfig = {
+        backgroundGradientFrom: "#f9f9f9",
+        backgroundGradientFromOpacity: 0,
+        backgroundGradientTo: "#f9f9f9",
+        backgroundGradientToOpacity: 0.5,
+        color: (opacity = 1) => `rgba(90, 90, 90, ${opacity})`,
+        strokeWidth: 2, // optional, default 3
+        barPercentage: 0.5,
+        useShadowColorFromDataset: false // optional
+      };
+    
     const [url, setUrl] = useState(false);
     const [updatedCurrency, setUpdatedCurrency] = useState([]);
 
@@ -25,10 +62,13 @@ export default function ExchangeAlert() {
             let rates = result.data.conversion_rates;
             let arrayFormOfRates = Object.entries(rates).map(([key, value]) => ({ key, value }));
 
+            set_rate_data(rates)
             
-            currency.map((currency_data) => {
-
+            
+            currency.map((currency_data) => {  
+ 
                arrayFormOfRates.map((rate_data) => {
+
 
                     if(currency_data.currency.abbreviation === rate_data.key){
                         setUpdatedCurrency(item => [...item, rate_data])
@@ -44,6 +84,46 @@ export default function ExchangeAlert() {
         })
        
     }, [])
+    
+
+    useEffect(() => {
+
+        const data = rate_data
+        
+        let list = Object.entries(data).map(([key, value]) => ({ key, value }));
+
+        let baseCurrencyObj = list.filter(item => item.key === baseCurrency?.currency?.abbreviation)[0]
+        let targetCurrencyObj = list.filter(item => item.key === targetCurrency?.currency?.abbreviation)[0]
+        
+        
+        // if(basecurrencyData.key === 'USD'){
+        //     set_updated_rate_data(
+        //         [
+        //             baseCurrencyObj?.value + 0.2%baseCurrencyObj?.value, 
+        //             baseCurrencyObj?.value + 0.3%baseCurrencyObj?.value, 
+        //             baseCurrencyObj?.value + 0.5%baseCurrencyObj?.value, 
+        //             baseCurrencyObj?.value + 0.6%baseCurrencyObj?.value, 
+        //             baseCurrencyObj?.value + 0.7%baseCurrencyObj?.value, 
+        //             baseCurrencyObj?.value + 0.8%baseCurrencyObj?.value, 
+        //             baseCurrencyObj?.value + 0.9%baseCurrencyObj?.value
+        //         ]
+        //     )
+        // }else{
+        //     set_updated_rate_data(
+        //         [
+        //             targetCurrencyObj?.value - 0.2%targetCurrencyObj?.value, 
+        //             targetCurrencyObj?.value - 0.3%targetCurrencyObj?.value, 
+        //             targetCurrencyObj?.value - 0.5%targetCurrencyObj?.value, 
+        //             targetCurrencyObj?.value - 0.6%targetCurrencyObj?.value, 
+        //             targetCurrencyObj?.value - 0.7%targetCurrencyObj?.value, 
+        //             targetCurrencyObj?.value - 0.8%targetCurrencyObj?.value, 
+        //             targetCurrencyObj?.value - 0.9%targetCurrencyObj?.value
+        //         ]
+        //     )
+        // }
+
+      
+    }, [rate_data,baseCurrency,targetCurrency])
     
     
     // State to track switch state (on/off)
@@ -118,7 +198,7 @@ export default function ExchangeAlert() {
     
 
     
-    return (
+    return ( 
         <>
 
             {
@@ -230,13 +310,19 @@ export default function ExchangeAlert() {
                     </View>
 
                     <View style={{height: 390, padding: 8, width: '100%', backgroundColor: '#fff', marginBottom: 10,marginTop: 10}}>
-                        <View style={{height: '100%', width: '100%', backgroundColor: '#efefef', borderRadius: 15, display: 'flex', flexDirection: 'column', padding: 22, justifyContent: 'space-between'}}>
+                        <View style={{height: '100%', width: '100%', backgroundColor: '#f9f9f9', borderRadius: 15, display: 'flex', flexDirection: 'column', padding: 12, justifyContent: 'space-between'}}>
                             <View>
                                 <Text style={[{color: '#000'}]}> 1 {basecurrencyData.key} = {targetcurrencyData.value} {targetcurrencyData.key}</Text>
                             </View>
 
                             <View>
-
+                                <LineChart
+                                    data={data}
+                                    width={(screenWidth - 80)}
+                                    height={220}
+                                    chartConfig={chartConfig}
+                                    borderRadius={10}
+                                />
                             </View>
 
                             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTopColor: '#707070', borderTopWidth: 1, paddingTop: 15}}>
@@ -406,7 +492,7 @@ const styles = StyleSheet.create({
         fontWeight: '300',
         position: 'absolute',
         right: 0,
-        borderColor: '#000'
+        borderColor: 'rgb(0, 0, 0)'
     },
 
     input1: {

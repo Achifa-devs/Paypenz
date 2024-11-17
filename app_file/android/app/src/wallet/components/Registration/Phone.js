@@ -2,17 +2,18 @@ import React from 'react';
 import { Text, TextInput, View } from 'react-native';
 import NaijaFlagSvg from '../../assets/flag-for-flag-nigeria-svgrepo-com.svg';
 
-export default function PhoneInput() {
+export default function PhoneInput({updatePhone}) {
   return (
     <>
         <View>
 
-            <Text style={{height: 'auto', width: '100%', backgroundColor: '#fff', marginTop: 10}}>Phone</Text>
+            <Text style={{height: 'auto', width: '100%', backgroundColor: '#fff', marginTop: 10, marginLeft: 6}}>Phone</Text>
             <View style={{
-                    display: 'flex',
+                    display: 'flex', 
                     flexDirection: 'row',
                     height: 60,
-                    width: '95%',
+                    width: '97%',
+                    margin: 'auto',
                     backgroundColor: '#efefef',
                     borderRadius: 10,
 
@@ -45,7 +46,7 @@ export default function PhoneInput() {
                         width: '100%',
                         height: '100%', 
                         padding: 10
-                    }} keyboardType='number-pad' maxLength={10} placeholder='Phone Number' keyboardAppearance='dark'></TextInput>
+                    }} keyboardType='number-pad' maxLength={10} placeholder='Phone Number' keyboardAppearance='dark' onChangeText={txt=>updatePhone(txt)} />
                 </View>
             </View>
         </View>

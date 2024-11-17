@@ -56,22 +56,24 @@ function App(){
         
         {/* <FlashMessage position="top" backgroundColor="red" />  */}
 
-        {/* <Stack.Navigator>
+        <Stack.Navigator>
           <Stack.Screen name={'user-registration'} options={{
  
             header: ({navigation}) =>
             (
               <View style={{ height: 100, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#007FFF', alignItems: 'center', justifyContent: 'center'}}>
                 
-              
+                <Text style={{fontSize: 30, color: '#fff'}}>
+                  Paypenz
+                </Text>
               </View>
             ),
                         
                         
           }} component={Registration} />  
-        </Stack.Navigator> */}
+        </Stack.Navigator>
 
-        <MyTab />
+        {/* <MyTab /> */}
 
       </NavigationContainer>
     </Provider> 
