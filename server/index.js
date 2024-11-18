@@ -25,6 +25,7 @@ const {
 const { 
   user_route 
 } = require('./user/api/post');
+const { user_route_get } = require('./user/api/get');
 
    
 greetingTime(new Date());
@@ -42,6 +43,7 @@ app.use(cors({
 })); 
 
 app.use(user_route)
+app.use(user_route_get)
  
 var server = app.listen(process.env.PORT,_ => console.log('app is live @',process.env.PORT));
 io(server, {cors: {origin: '*'}}).on('connection',(socket) => {

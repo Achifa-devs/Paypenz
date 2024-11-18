@@ -1,7 +1,7 @@
 
 
-import { Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Button, Alert } from "react-native";
-import { useEffect, useState } from "react";
+import { Dimensions, ScrollView, Vibration, StyleSheet, Text, TextInput, TouchableOpacity, View, Button, Alert } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
@@ -14,56 +14,42 @@ import GoogleSvg from '../assets/google-icon-logo-svgrepo-com.svg';
 import CloseSVG from '../../wallet/assets/close-square-svgrepo-com.svg'
 import PinKeys from '../components/PinScreen/PinKeys';
 import BackSvg from '../assets/back-svgrepo-com (4).svg'
-
+import CookieManager from '@react-native-cookies/cookies';
+import { storeData } from "../reusables/AsyncStore.js";
+import { set_cookie } from "../../../../../redux/cookie";
 
 const Signup = ({}) => {
+
+    
+      
+
+    let navigation = useNavigation();
+    const screenHeight = Dimensions.get('window').height;
+    const screenWidth = Dimensions.get('window').width;
 
     let [overlay, setOverlay] = useState(false);
     let [userId, setUserId] = useState('');
 
-    let openModal = (a) => {
-        setOverlay(true)
-    }
-    
-    let closeModal = e => {
-        setOverlay(false)
-    }  
+    let pin_confirmation = useRef({_1st_pin: null, _2nd_pin: null})
 
-    
-    let [pg_title, set_pg_title] = useState('Setup your transfer new pin'); 
-    const screenHeight = Dimensions.get('window').height;
-    const screenWidth = Dimensions.get('window').width;
+    let openModal = (a) => {setOverlay(true)}
+    let closeModal = e => {setOverlay(false)} 
+    let dispatch = useDispatch() 
 
-    let [pin_result_1, set_pin_result_1] = useState([])
-    let [pin_result_2, set_pin_result_2] = useState([])
+    const handleVibrate = (timer) => {Vibration.vibrate(timer)};
 
     let [pin, set_pin] = useState([]);
-
-    function deletePin() {
-        set_pin(pin.splice(0, pin.length - 1))
-    }
+    let [pg_title, set_pg_title] = useState('Setup your transfer pin'); 
 
     function updatePin(data) {
-        set_pin(pins => [...pins, data])
+        set_pin(inital_pin => [...inital_pin, data])
+        handleVibrate(100)
     }
-
-    useEffect(() => {
-        if(pg_title.toLowerCase() === 'setup your new transfer pin'){
-            set_pin_result_1(pin)
-        }else{
-            set_pin_result_2(pin)
-        }
-    }, [pin])
-
-    useEffect(() => {
-        if (pin_result_1.length === 4) {
-            set_pg_title('Confirm your new transfer pin')
-            set_pin([])
-        }
-    }, [pin_result_1])
+    function deletePin() {set_pin(pin.splice(0, pin.length - 1)); handleVibrate(50)}
 
     function uploadPin(data) {
-        fetch('http://192.168.35.146:2003/system.pin-set-up', {
+        console.log('data: ', data)
+        fetch('http://192.168.234.146:2003/system.pin-set-up', {
             method: 'post',
             headers: {
                 "Content-Type": "Application/json"
@@ -75,7 +61,22 @@ const Signup = ({}) => {
             // console.log(result)
             console.log(response)
             if(response.bool){
-                navigation.navigate('user-tab')
+                CookieManager.set('https://paypenz.com', {
+                    name: 'jwt_token',
+                    value: response.cookie,
+                    domain: 'paypenz.com',
+                    path: '/',
+                    version: '1',
+                    secure: true,
+                    expires: `'${90 * 24 * 60 * 60}'`
+                })
+                .then((done) => {
+                    console.log('Cookie set!', done);
+                    dispatch(set_cookie(true))
+                })
+                .catch(err => console.log(err))
+                
+                // navigation.navigate('user-tab')
             }else{
                 
             }
@@ -87,29 +88,36 @@ const Signup = ({}) => {
             
         })
     }
-    
+
     useEffect(() => {
-       console.log(pin_result_1, pin_result_2)
-        if(pin_result_1.map(item => item).join('') === pin_result_2.map(item => item).join('') && pin.length !== 0){
-            uploadPin({pin: pin, user_id: userId})
-        }else{
-            set_pg_title('Setup your new transfer pin')
-            set_pin([])
+        if(pin.length === 4){
+            if(pin_confirmation.current._1st_pin === null){
+                pin_confirmation.current._1st_pin = pin;
+                set_pin([])
+                set_pg_title('Confirm your transfer pin')
+            }else{
+                pin_confirmation.current._2nd_pin = pin;
+                // set_pg_title('Setup your transfer new pin')
+                if(pin_confirmation.current._1st_pin.map(item => item).join('') === pin_confirmation.current._2nd_pin.map(item => item).join('')){
+                    uploadPin({pin: pin_confirmation.current._2nd_pin, user_id: userId})
+                }else{
+                    handleVibrate(500)
+                    set_pin([])
+                    set_pg_title('Setup your transfer pin')
+                    pin_confirmation.current._1st_pin = null;
+                    pin_confirmation.current._2nd_pin = null;
+                }
+            }
         }
-    }, [pin_result_2])
+    }, [pin])
+
     
-
-
-    let dispatch = useDispatch()
-    let navigation = useNavigation()
-
     let [fname, setFname] = useState('')
     let [lname, setLname] = useState('')
     let [email, setEmail] = useState('')
     let [phone, setPhone] = useState('')
     let [pwd, setPwd] = useState('')
     let [c_pwd, setc_Pwd] = useState('')
-    let [server_err, set_server_err] = useState('')
 
     let [fnameErr, setFnameErr] = useState('')
     let [lnameErr, setLnameErr] = useState('')
@@ -120,16 +128,6 @@ const Signup = ({}) => {
      
    
     let signupHandler = async() => {
-        // dispatch(setUserAuthTo(true))   
-        // navigation.navigate('user-home')
-        
-        // singup(fname,lname,email,phone,pwd)
-        // .then((result) => {
-        //     console.log(result)
-        //     result ? navigation.navigate('seller-login') : ''
-        // })
-        // .catch((err) => console.log(err))
-
         let response = await validateInput()
 
         response.map(item => {
@@ -158,7 +156,7 @@ const Signup = ({}) => {
         if(data){
 
             
-            fetch('http://192.168.35.146:2003/system.signup', {
+            fetch('http://192.168.234.146:2003/system.signup', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json"
@@ -171,6 +169,9 @@ const Signup = ({}) => {
                 console.log(response)
                 if(response.bool){
                     setUserId(response.id)
+                    storeData('email', response.user.email)
+                    storeData('phone', response.user.phone)
+                    storeData('user_id', response.id)
                     openModal()
                 }else{
                     if(response.data === 'duplicate email'){
@@ -276,6 +277,10 @@ const Signup = ({}) => {
         return [...result];
     } 
 
+    
+    
+      
+
 
     return ( 
         <> 
@@ -294,27 +299,34 @@ const Signup = ({}) => {
                                 
                             </View> 
 
-                            <Text style={{fontSize: 27, color: '#000', fontWeight: '600', height: 'auto', backgroundColor: '#fff', padding: 15}}>{pg_title}</Text>
+                            <Text style={{fontSize: 20, color: '#000', fontWeight: '600', height: 'auto', backgroundColor: '#fff', padding: 15}}>{pg_title}</Text>
 
                            
-                            <View style={{fontSize: 17, color: '#000', fontWeight: '600', height: 'auto', backgroundColor: '#fff', padding: 15, marginTop: 50, justifyContent: 'space-between', flexDirection: 'row', display: 'flex', alignItems: 'center'}}> 
-                                
-                                {
-                                   
-                                    [
-                                        <Text style={{fontSize: 17, textAlign: 'center', color: '#000', fontWeight: '900', height: 60, backgroundColor: '#efefef', width: '16%', borderRadius: 50, paddingTop: 17, marginBottom: 50, alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>{pin[0]}</Text>,
-                                        <Text style={{fontSize: 17, textAlign: 'center', color: '#000', fontWeight: '900', height: 60, backgroundColor: '#efefef', width: '16%', borderRadius: 50, paddingTop: 17, marginBottom: 50, alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>{pin[1]}</Text>,
-                                        <Text style={{fontSize: 17, textAlign: 'center', color: '#000', fontWeight: '900', height: 60, backgroundColor: '#efefef', width: '16%', borderRadius: 50, paddingTop: 17, marginBottom: 50, alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>{pin[2]}</Text>,
-                                        <Text style={{fontSize: 17, textAlign: 'center', color: '#000', fontWeight: '900', height: 60, backgroundColor: '#efefef', width: '16%', borderRadius: 50, paddingTop: 17, marginBottom: 50, alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>{pin[3]}</Text>
-                                    ].map(item => item)
-                                    
-                                }
-
-                            </View>
+                            
                             
 
-                            <View style={{fontSize: 17, color: '#000', fontWeight: '600', height: 'auto', backgroundColor: '#fff', padding: 0, width: screenWidth, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', position: 'absolute', right: 0, bottom: 0}}>
+                            <View style={{fontSize: 17, color: '#000', fontWeight: '600', height: 'auto', backgroundColor: '#fff', padding: 0, width: screenWidth, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'absolute', right: 0, bottom: 0}}>
+                                <View style={{fontSize: 17, color: '#000', fontWeight: '600', height: 60, backgroundColor: '#fff', marginBottom: 10, padding: 0, margin: 0, justifyContent: 'center', flexDirection: 'row', display: 'flex', alignItems: 'center'}}> 
+                                    
+                                    {
+                                    
+                                        [
+                                            <Text style={{fontSize: 17, textAlign: 'center', color: '#000', fontWeight: '900', height: 55, backgroundColor: '#efefef', width: 55, borderRadius: 10, paddingTop: 17, marginLeft: 10, alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>{pin[0]}</Text>,
+                                            <Text style={{fontSize: 17, textAlign: 'center', color: '#000', fontWeight: '900', height: 55, backgroundColor: '#efefef', width: 55, borderRadius: 10, paddingTop: 17, marginLeft: 10, alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>{pin[1]}</Text>,
+                                            <Text style={{fontSize: 17, textAlign: 'center', color: '#000', fontWeight: '900', height: 55, backgroundColor: '#efefef', width: 55, borderRadius: 10, paddingTop: 17, marginLeft: 10, alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>{pin[2]}</Text>,
+                                            <Text style={{fontSize: 17, textAlign: 'center', color: '#000', fontWeight: '900', height: 55, backgroundColor: '#efefef', width: 55, borderRadius: 10, paddingTop: 17, marginLeft: 10, marginRight: 10, alignItems: 'center', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>{pin[3]}</Text>
+                                        ].map(item => item)
+                                        
+                                    }
+
+                                </View>
                                 <PinKeys deletePin={deletePin} updatePin={updatePin} />
+
+                                {/* <TouchableOpacity onPress={e => navigation.navigate('user-login')}  style={{height: 60, width: 'auto', marginTop: 5, marginBottom: 5, display: 'flex', alignItems: 'center', backgroundColor: '#fff', justifyContent: 'center', flexDirection: 'column'}}>
+                            
+                                    <Text style={{height: 'auto', width: 'auto', fontSize: 10, backgroundColor: '#fff', color: '#1E90FF'}}></Text>
+
+                                </TouchableOpacity> */}
                             </View>
 
 
@@ -325,21 +337,23 @@ const Signup = ({}) => {
                 )
 
             }
+
+
             <View style={{
-                height: 100,
+                height: 120,
                 width: '100%',
                 position: 'relative',
-                backgroundColor: '#007FFF',
+                backgroundColor: '#1E90FF',
                 color: '#000',
                 overflow: 'scroll'
             }}>
 
             </View>
             <View style={{
-                height: screenHeight - 100,
+                height: screenHeight - 120,
                 width: '100%',
                 position: 'relative',
-                backgroundColor: '#007FFF',
+                backgroundColor: '#1E90FF',
                 color: '#000',
                 overflow: 'scroll'
             }}>
@@ -356,11 +370,11 @@ const Signup = ({}) => {
                             alignItems: 'center',
                             flexDirection: 'row',
                             marginTop: 10,
-                            borderColor: '#007FFF',
+                            borderColor: '#1E90FF',
                             borderWidth: 1,
                             borderRadius: 10,
                             marginBottom: 40,
-                            backgroundColor: '#007FFF',
+                            backgroundColor: '#1E90FF',
                             
 
                         }}>
@@ -442,14 +456,14 @@ const Signup = ({}) => {
                             </View>
 
                             <View style={{ height: 80, display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 10}}>
-                                <Text style={{width: '100%', color: '#000', marginLeft: 8}}>Password</Text>
-                                <TextInput maxLength={6} keyboardType="numeric" style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setPwd(e)} name="pwd"  placeholder="Password"  />
+                                <Text style={{width: '100%', color: '#000', marginLeft: 8}}>Passcode</Text>
+                                <TextInput maxLength={6} keyboardType="numeric" style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setPwd(e)} name="pwd"  placeholder="Passcode"  />
                                 <Text style={{color: '#000', marginBottom: 15, display: pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{pwdErr}</Text>
                             </View>
 
                             <View style={{ height: 80, display: 'flex', color: '#000', width: '100%', flexDirection: 'column', marginBottom: 10}}>
-                                <Text style={{width: '100%', color: '#000', marginLeft: 8}}>Confirm Password</Text>
-                                <TextInput maxLength={6} keyboardType="numeric" style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setc_Pwd(e)} name="c_pwd"  placeholder="Confirm Password"  />
+                                <Text style={{width: '100%', color: '#000', marginLeft: 8}}>Confirm Passcode</Text>
+                                <TextInput maxLength={6} keyboardType="numeric" style={{height: 50, fontFamily: 'Roboto', padding: 10, borderRadius: 10, marginBottom: 2, width: '100%',  backgroundColor: '#efefef'}} onChangeText={e => setc_Pwd(e)} name="c_pwd"  placeholder="Confirm Passcode"  />
                                 <Text style={{color: '#000', marginBottom: 15, display: c_pwdErr.length > 0 ? 'flex' : 'none', fontSize: 10, paddingLeft: 5, color: 'red'}}>{c_pwdErr}</Text>
                             </View>
 
@@ -467,16 +481,17 @@ const Signup = ({}) => {
                     position: 'relative',
                     backgroundColor: '#fff',
                     color: '#000',
-                    padding: 30, 
+                    padding: 20, 
                     overflow: 'scroll'
                 }}>
-                    <TouchableOpacity activeOpacity={.6} onPress={e => signupHandler()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, marginBottom: 3, flexDirection: 'row', borderRadius: 15, height: 60, width: '100%', backgroundColor: '#007FFF'}} >
+                    <TouchableOpacity activeOpacity={.6} onPress={e => signupHandler()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, marginBottom: 3, flexDirection: 'row', borderRadius: 15, height: 60, width: '100%', backgroundColor: '#1E90FF'}} >
                         <Text style={{fontWeight: 'bold', borderRadius: 15, color: '#fff', textAlign: 'center', fontSize: 15}}>Signup</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={e => navigation.navigate('user-login')}  style={{height: 60, width: 'auto', marginTop: 5, marginBottom: 5, display: 'flex', alignItems: 'center', backgroundColor: '#fff', justifyContent: 'center', flexDirection: 'column'}}>
+
+                    <TouchableOpacity onPress={e => navigation.navigate('login')}  style={{height: 60, width: 'auto', marginTop: 5, marginBottom: 5, display: 'flex', alignItems: 'center', backgroundColor: '#fff', justifyContent: 'center', flexDirection: 'column'}}>
                             
-                        <Text style={{height: 'auto', width: 'auto', fontSize: 10, backgroundColor: '#fff', color: '#007FFF'}}>Already Have An Account Login Here</Text>
+                        <Text style={{height: 'auto', width: 'auto', fontSize: 10, backgroundColor: '#fff', color: '#1E90FF'}}>Already Have An Account Login Here</Text>
 
                     </TouchableOpacity>
 

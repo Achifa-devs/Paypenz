@@ -12,7 +12,7 @@ export default function Btn({title}) {
             justifyContent: 'center',
             borderRadius: 10,
             color: '#fff',
-            backgroundColor: '#007FFF',
+            backgroundColor: '#1E90FF',
             marginTop: 20
             
         }}>

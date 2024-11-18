@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     marginLeft: 5, 
     padding: 10,
     marginRight: 5,
-    backgroundColor: '#710193'
+    backgroundColor: '#1E90FF'
   },
 
   Home: {
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     width: '100%', 
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
-    backgroundColor: '#710193',
+    backgroundColor: '#1E90FF',
     display: 'flex', 
     padding: 20,
     fontFamily: 'serif',
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     display: 'flex', 
     padding: 10,
     marginLeft: 8,
-    color: '#710193',
+    color: '#1E90FF',
     marginRight: 8,
     fontFamily: 'serif',
     alignItems: 'center',

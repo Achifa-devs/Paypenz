@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Dimensions, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import UserSvg from '../../wallet/assets/user-rounded-svgrepo-com (1).svg'
 import SupportSvg from '../../wallet/assets/support-svgrepo-com (4).svg'
@@ -8,9 +8,17 @@ import AngleSvg from '../../wallet/assets/angle-right-svgrepo-com.svg'
 import LogoutSvg from '../../wallet/assets/logout-svgrepo-com.svg'
 import HelpSvg from '../../wallet/assets/help1-svgrepo-com.svg'
 import RatingSvg from '../../wallet/assets/star-rating-svgrepo-com (1).svg'
+import { getData } from '../reusables/AsyncStore.js'
 
 export default function Me({navigation}) {
   const screenHeight = Dimensions.get('window').height;
+  let [user, set_user] = React.useState('')
+
+  useEffect(() => {
+    let data = getData('user_id');
+    set_user(data)
+  }, [])
+  
 
   return (
     <>

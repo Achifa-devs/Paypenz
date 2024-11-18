@@ -8,7 +8,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View 
+    View,
+    StatusBar
 } from 'react-native';
 
 import { 
@@ -19,45 +20,48 @@ import {
     useSelector 
 } from 'react-redux';
 
-import BackSvg from '../../assets/back-svgrepo-com (4).svg'
-import BellSvg from '../../assets/notification-svgrepo-com (1).svg'
-import SettingSvg from '../../assets/settings-svgrepo-com (8).svg'
+import BackSvg from '../assets/back-svgrepo-com (4).svg'
+import BellSvg from '../assets/notification-svgrepo-com (1).svg'
+import SettingSvg from '../assets/settings-svgrepo-com (8).svg'
 
-import Home from '../../screens/Home';
-import Me from '../../screens/Me';
-import Cards from '../../screens/Cards';
-import Airtime from '../../screens/secondary/Airtime';
-import Data from '../../screens/secondary/Data';
-import Electricity from '../../screens/secondary/Electricity';
-import TV from '../../screens/secondary/Tv';
-import GiftCard from '../../screens/secondary/GiftCard';
+import Home from '../screens/Home';
+import Me from '../screens/Me';
+import Cards from '../screens/Cards';
+import Airtime from '../screens/secondary/Airtime';
+import Data from '../screens/secondary/Data';
+import Electricity from '../screens/secondary/Electricity';
+import TV from '../screens/secondary/Tv';
+import GiftCard from '../screens/secondary/GiftCard';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Transfer from '../../screens/secondary/Transfer';
-import Deposit from '../../screens/secondary/Deposit';
-import Withdraw from '../../screens/secondary/Withdraw';
+import Transfer from '../screens/secondary/Transfer';
+import Deposit from '../screens/secondary/Deposit';
+import Withdraw from '../screens/secondary/Withdraw';
 import { useNavigationState } from '@react-navigation/native';
-import PersonalData from '../../screens/PersonalData';
-import Invite from '../../screens/Invite';
-import Setting from '../../screens/Setting';
-import AccountSecurity from '../../screens/Settings/AccountSecurity&Privacy';
-import ChangeEmail from '../../screens/Settings/AccountSecurity/ChangeEmail';
-import ChangePhone from '../../screens/Settings/AccountSecurity/ChangePhone';
-import ChangePwd from '../../screens/Settings/AccountSecurity/ChangePwd';
-import Verification from '../../screens/Settings/AccountSecurity/Verification';
-import Logout from '../../screens/Settings/AccountSecurity/Logout';
-import ConnectedServices from '../../screens/Settings/AccountSecurity/ConnectedServices';
-import Notification from '../../screens/Settings/Notification';
-import ExchangeAlert from '../../screens/Settings/ExchangeAlert';
-// import { ws } from '../../../../../utils/socket';
+import PersonalData from '../screens/PersonalData';
+import Invite from '../screens/Invite';
+import Setting from '../screens/Setting';
+import AccountSecurity from '../screens/Settings/AccountSecurity&Privacy';
+import ChangeEmail from '../screens/Settings/AccountSecurity/ChangeEmail';
+import ChangePhone from '../screens/Settings/AccountSecurity/ChangePhone';
+import ChangePwd from '../screens/Settings/AccountSecurity/ChangePwd';
+import Verification from '../screens/Settings/AccountSecurity/Verification';
+import Logout from '../screens/Settings/AccountSecurity/Logout';
+import ConnectedServices from '../screens/Settings/AccountSecurity/ConnectedServices';
+import Notification from '../screens/Settings/Notification';
+import ExchangeAlert from '../screens/Settings/ExchangeAlert';
+import { getData } from './AsyncStore.js';
+// import { ws } from '../../../../utils/socket';
 // import Icon from 'react-native-vector-icons/Ionicons';
 const Tab = createBottomTabNavigator();
 
 export default function MyTab() {
 
     const navigationState = useNavigationState(state => state);
+    
+    
 
     React.useEffect(() => {
-        console.log('Current Navigation State:', navigationState);
+        // console.log('Current Navigation State:', navigationState);
     }, [navigationState]);
 
   return (
@@ -162,7 +166,7 @@ export default function MyTab() {
                 options={{
                 header: ({navigation}) =>
                     (
-                        <View style={{ height: 200, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#007FFF', alignItems: 'center', justifyContent: 'center'}}>
+                        <View style={{ height: 200, display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#1E90FF', alignItems: 'center', justifyContent: 'center'}}>
                         
                             
                         </View>
@@ -186,8 +190,8 @@ function HomeStackScreen() {
         <HomeStack.Screen  options={{
                 header: ({navigation}) =>
                 (
-                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', padding: '10px'}}>
-                        
+                    <View style={{ height: 55, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#1E90FF', alignItems: 'center', padding: '10px'}}>
+                        <StatusBar backgroundColor="#1E90FF" barStyle="light-content" />
                         <TouchableOpacity style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 'auto', padding: 8, alignItems: 'flex-end'}}>
                         <View style={{backgroundColor: '#FF4500', height: '100%', width: 40, borderRadius: 10}}></View>
                         <Text>&nbsp;</Text>
@@ -398,15 +402,22 @@ function HomeStackScreen() {
   );
 }   
 
-
-
 const MeStack = createNativeStackNavigator();
 function MeStackScreen() {
+    let [user, set_user] = React.useState('')
+    React.useEffect(() => {
+        async function get_user() {
+            let data = await getData('user');
+            set_user(JSON.parse(data))
+            // console.log('data:', JSON.parse(data))
+        }
+        get_user() 
+    }, []) 
   return (
     <MeStack.Navigator>
         <MeStack.Screen  options={{
-                header: ({navigation}) =>
-                (
+                header: ({navigation}) => 
+                (  
 
                     <>
                         <View style={{ height: 50, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#FFF', alignItems: 'center', paddingLeft: 25, paddingRight: 25}}>
@@ -431,7 +442,7 @@ function MeStackScreen() {
                             </View>
 
                             <View>
-                                <Text>Chinedu Fabian</Text>
+                                <Text>{user?.fname} {user?.lname}</Text>
                                 <Text>@achifa2003</Text>
                             </View>
                             <View>

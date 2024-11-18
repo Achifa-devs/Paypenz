@@ -18,6 +18,6 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         position: 'relative',
-        backgroundColor: '#007FFF',
+        backgroundColor: '#1E90FF',
       },
   });

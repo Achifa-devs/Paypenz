@@ -141,7 +141,7 @@ async function register_user(req,res) {
                 `)
                 .then((result) => {
                     const token = createToken(user_id);
-                    result.rowCount === 1 ? res.status(200).send({bool: true, cookie: token, id: user_id}) : ({bool: false, data: ''})
+                    result.rowCount === 1 ? res.status(200).send({bool: true, cookie: token, id: user_id, user: {email: email, phone: phone}}) : ({bool: false, data: ''})
                 })
                 .catch(err => {
                     console.log(err)
@@ -156,13 +156,18 @@ async function register_user(req,res) {
 
 
 async function signin_user(req, res) {
-    let {email,pwd,provider} = req.body;
+    let {input,pwd,input_data,provider} = req.body;
+    console.log(input_data)
  
+    let data = input === 'email' ? 'email' : 'phone';
+
+    let query_string = input === 'email' ? `select "id" from "users" where "email" = '${input_data}'` : `select "id" from "users" where "phone" = '${input_data}'`;
+
     try {
         new Promise((resolve, reject) => {
             neon_db().then(async(pool) => 
                     
-                pool.query(`select "id" from "users" where "email" = '${email}'`)
+                pool.query(query_string)
                 .then((result) => {
                     if(result.rows.length > 0){
                         const id = result.rows[0].id;
@@ -199,7 +204,7 @@ async function signin_user(req, res) {
     
                     if (auth) {
                         const token = createToken(user.user_id);
-                        res.status(200).send({bool: true, id: user.user_id, cookie: token});
+                        res.status(200).send({bool: true, id: user.user_id, cookie: token, user: {email: input_data, phone: input_data}});
             
                     }else{
                         res.status(400).send({
