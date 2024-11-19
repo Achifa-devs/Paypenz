@@ -116,7 +116,7 @@ async function register_user(req,res) {
                         timezone,
                         pin
                     )
-                    VALUES(
+                    VALUES (
                         DEFAULT,
                         '${user_id}',
                         '${provider}',
@@ -127,28 +127,62 @@ async function register_user(req,res) {
                         '${phone}',
                         '${null}',
                         '${false}',
-                        '${new Date()}',
+                        '${new Date().toISOString()}',
                         '${false}',
                         '${false}',
                         '${false}',
-                        '${new Date()}',
-                        '${new Date()}',
+                        '${new Date().toISOString()}',
+                        '${new Date().toISOString()}',
                         '${referral_src}',
                         'en',
                         '+01:00 Africa/Lagos',
                         null
                     )
+                        RETURNING 
+                        user_id,
+                        provider,
+                        fname,
+                        lname,
+                        email,
+                        phone_number,
+                        gender,
+                        is_active,
+                        last_seen,
+                        is_email_verified,
+                        is_phone_verified,
+                        is_acct_verified,
+                        created_at,
+                        updated_at,
+                        referral_src,
+                        language,
+                        timezone
                 `)
                 .then((result) => {
-                    const token = createToken(user_id);
-                    result.rowCount === 1 ? res.status(200).send({bool: true, cookie: token, id: user_id, user: {email: email, phone: phone}}) : ({bool: false, data: ''})
-                })
-                .catch(err => {
-                    console.log(err)
-                    res.status(400).send({bool: false, err: ''})
-                })
+                    if (result.rowCount === 1) {
+                        const user = result.rows[0];
+                        const token = createToken(user_id);
             
-            }).catch(err => console.log(err))
+                        res.status(200).send({
+                            bool: true,
+                            cookie: token,
+                            id: user_id,
+                            user: user
+                        });
+                    } else {
+                        res.status(400).send({
+                            bool: false,
+                            data: ''
+                        });
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                    res.status(400).send({ bool: false, err: '' });
+                });
+            }).catch((err) => {
+                console.error(err);
+            })
+            
         )
     }
 }
@@ -186,7 +220,11 @@ async function signin_user(req, res) {
             return(
                 neon_db().then(async(pool) => {
                     let database_return_value = await pool.query(
-                        `SELECT "user_id","email","password","fname","lname" FROM  "users" WHERE "id" = '${id}'`
+                        `SELECT 
+                        
+                        *
+
+                        FROM  "users" WHERE "id" = '${id}'`
                     )
                     .then(result => result.rows[0])
                     .catch(err => console.log(err))
@@ -204,7 +242,13 @@ async function signin_user(req, res) {
     
                     if (auth) {
                         const token = createToken(user.user_id);
-                        res.status(200).send({bool: true, id: user.user_id, cookie: token, user: {email: input_data, phone: input_data}});
+                        // res.status(200).send({bool: true, id: user, cookie: token, user: {email: input_data, phone: input_data}});
+                        res.status(200).send({
+                            bool: true,
+                            cookie: token,
+                            id: user.user_id,
+                            user: user
+                        });
             
                     }else{
                         res.status(400).send({
@@ -214,7 +258,12 @@ async function signin_user(req, res) {
                     }
                 }else{
                     const token = createToken(user.user_id);
-                    res.status(200).send({bool: true, id: user.user_id, cookie: token});
+                    res.status(200).send({
+                        bool: true,
+                        cookie: token,
+                        id: user_id,
+                        user: user
+                    });
                 }
             }else{
                 res.status(400).send({

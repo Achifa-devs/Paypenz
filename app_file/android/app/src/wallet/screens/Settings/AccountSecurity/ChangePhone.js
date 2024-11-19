@@ -1,7 +1,11 @@
 import React from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
+import { useSelector } from 'react-redux';
 
 export default function ChangePhone() {
+    let {
+        user
+    } = useSelector(s=>s.user);
     return (
         <>
             <View style={styles.cnt} >
@@ -16,7 +20,7 @@ export default function ChangePhone() {
                         <Text style={styles.label}>Primary phone Number</Text>
                         <View style={{flexDirection: 'row', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                             <TextInput style={styles.countryCode} placeholder='+___' value='+234' />
-                            <TextInput style={styles.input} placeholder='akpulufabian@gmail.com' />
+                            <TextInput style={styles.input} defaultValue={user.phone_number} placeholder='akpulufabian@gmail.com' />
                         </View>
                     </View>
 

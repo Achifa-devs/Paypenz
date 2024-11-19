@@ -9,16 +9,28 @@ import LogoutSvg from '../../wallet/assets/logout-svgrepo-com.svg'
 import HelpSvg from '../../wallet/assets/help1-svgrepo-com.svg'
 import RatingSvg from '../../wallet/assets/star-rating-svgrepo-com (1).svg'
 import { getData } from '../reusables/AsyncStore.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { set_user } from '../../../../../redux/user.js'
 
 export default function Me({navigation}) {
   const screenHeight = Dimensions.get('window').height;
-  let [user, set_user] = React.useState('')
 
-  useEffect(() => {
-    let data = getData('user_id');
-    set_user(data)
-  }, [])
+  let dispatch= useDispatch();
+  let {
+    user
+  } = useSelector(s=>s.user);
   
+    // let [user, set_user] = React.useState('')
+    React.useEffect(() => {
+        async function get_user() {
+            let data = await getData('user');
+            // set_user(JSON.parse(data));
+            dispatch(set_user(JSON.parse(data)))
+            
+            // console.log('data:', JSON.parse(data))
+        }
+        get_user() 
+    }, []) 
 
   return (
     <>

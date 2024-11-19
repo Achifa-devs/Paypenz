@@ -49,9 +49,7 @@ import axios from 'axios';
 function App(){
 
   
-
-  
-   
+ 
   return (
     
     <Provider store={store}>
@@ -91,21 +89,6 @@ function NavCnt() {
     })
     .catch(err => console.log(err))
   }, [])
-
-  useEffect(() => {
-    async function get_user() {
-      let user = await getData('user_id')
-      axios.get('http://192.168.234.146:2003/system.user', {params: {user_id: user}})
-      .then((result) => {
-        let response =   result.data;
-        console.log(response)
-        storeData('user', JSON.stringify(response)) 
-      })  
-      .catch(err => console.log(err))
-    }    
-    get_user() 
-  }, [])
-  
 
   let Stack = createNativeStackNavigator()
   

@@ -310,8 +310,11 @@ function HomeStackScreen() {
         <HomeStack.Screen  options={{
             header: ({navigation}) =>
             (
-                <View style={{ height: 55, display: 'none', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: '10px', margin: '0'}}>
-
+                <View style={{ height: 45, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: 10, margin: '0'}}>
+                    <Text>Airtime</Text>
+                    <TouchableOpacity>
+                        <Text style={{color: '#1E90FF'}}>History</Text>
+                    </TouchableOpacity>
                 </View>
             ),
             // headerShown: false, 
@@ -404,15 +407,11 @@ function HomeStackScreen() {
 
 const MeStack = createNativeStackNavigator();
 function MeStackScreen() {
-    let [user, set_user] = React.useState('')
-    React.useEffect(() => {
-        async function get_user() {
-            let data = await getData('user');
-            set_user(JSON.parse(data))
-            // console.log('data:', JSON.parse(data))
-        }
-        get_user() 
-    }, []) 
+
+    let {
+        user
+    } = useSelector(s=>s.user);
+
   return (
     <MeStack.Navigator>
         <MeStack.Screen  options={{
@@ -441,10 +440,10 @@ function MeStackScreen() {
 
                             </View>
 
-                            <View>
-                                <Text>{user?.fname} {user?.lname}</Text>
-                                <Text>@achifa2003</Text>
-                            </View>
+                            <View style={{ height: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '100%', backgroundColor: '#fff', alignItems: 'center', padding: 5, marginBottom: 0}}>
+                                <Text style={{color: '#000'}}>{user?.fname} {user?.lname}</Text>
+                                <Text style={{color: '#000'}}>{user?.email}</Text>
+                            </View> 
                             <View>
                                 <TouchableOpacity style={{borderWidth: 2,borderColor: '#efefef', padding: 8, borderRadius: 10, marginTop: 10}}>
                                     <Text>Upgrade to premium</Text>

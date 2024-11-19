@@ -98,6 +98,7 @@ const Login = ({}) => {
                         console.log('Cookie set!', done);
                         storeData('email', response.user.email)
                         storeData('phone', response.user.phone)
+                        storeData('user', JSON.stringify(response.user)) 
                         storeData('user_id', response.id)
                         dispatch(set_cookie(true))
                         // openModal()

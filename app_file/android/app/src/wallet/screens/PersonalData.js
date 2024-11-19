@@ -1,7 +1,28 @@
 import React from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
+import { useSelector } from 'react-redux';
 
 export default function PersonalData() {
+
+    let {
+        user
+    } = useSelector(s=>s.user);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [selectedDate, setSelectedDate] = useState('');
+  
+    const showDatePicker = () => {
+      setDatePickerVisibility(true);
+    };
+  
+    const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+    };
+  
+    const handleConfirm = (date) => {
+      setSelectedDate(date.toISOString().split('T')[0]); // Format as YYYY-MM-DD
+      hideDatePicker();
+    };
+    
   return (
     <>
         <View style={styles.cnt} >
@@ -10,43 +31,50 @@ export default function PersonalData() {
             <ScrollView >
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Country of residence</Text>
-                    <TextInput style={styles.input} />
+                    <TextInput style={styles.input} defaultValue='Nigeria' />
                 </View>
 
 
                 <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: .5, paddingBottom: 10, marginBottom: 10, marginTop: 25}]}>Personal Details</Text>
                 <View style={styles.inputCnt}>
-                    <Text style={styles.label}>First and Middle Name</Text>
-                    <TextInput style={styles.input} />
+                    <Text style={styles.label}>Full name</Text>
+                    <TextInput style={styles.input} defaultValue={`${user.fname} ${user.lname}`} />
                 </View>
-
+{/* 
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Last Name</Text>
                     <TextInput style={styles.input} />
-                </View>
+                </View> */}
 
                 <View style={{marginTop: 10}}>
                     <Text style={[styles.label, {marginLeft: 15, marginBottom: -12, margintTop: 10}]}>Date Of Birth</Text>
 
-                    <View style={[styles.dateInputCnt, {padding: 10}]}>
+                    {/* <View style={[styles.dateInputCnt, {padding: 10}]}>
                         <View style={styles.dateInput}>
                             <Text style={styles.label}>Date</Text>
-                            <TextInput style={styles.input} />
+                            <TextInput style={styles.input} defaultValue={`${''}`} />
                         </View>
                         <View style={styles.dateInput}>
                             <Text style={styles.label}>Month</Text>
-                            <TextInput style={styles.input} />
+                            <TextInput style={styles.input} defaultValue={`${''}`} />
                         </View>
                         <View style={styles.dateInput}>
                             <Text style={styles.label}>Year</Text>
-                            <TextInput style={styles.input} />
+                            <TextInput style={styles.input} defaultValue={`${''}`} />
                         </View>
-                    </View>
+                    </View> */}
+
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                    />
                 </View>
 
                 <View style={styles.inputCnt}>
                     <Text style={styles.label}>Phone number</Text>
-                    <TextInput style={styles.input} />
+                    <TextInput style={styles.input} defaultValue={`${user.phone_number}`} />
                 </View>
 
                 {/* <Text style={[styles.label, {borderBottomColor: '#000', borderBottomWidth: 1}]}>Change phone number</Text> */}

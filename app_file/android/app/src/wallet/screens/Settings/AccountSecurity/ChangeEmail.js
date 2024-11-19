@@ -1,7 +1,12 @@
 import React from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
+import { useSelector } from 'react-redux';
 
 export default function ChangeEmail() {
+
+    let {
+        user
+    } = useSelector(s=>s.user);
     return (
         <>
             <View style={styles.cnt} >
@@ -10,7 +15,7 @@ export default function ChangeEmail() {
                 <ScrollView >
                     <View style={styles.inputCnt}>
                         <Text style={styles.label}>Account email</Text>
-                        <TextInput style={styles.input} placeholder='akpulufabian@gmail.com' />
+                        <TextInput style={styles.input} defaultValue={user.email} placeholder='akpulufabian@gmail.com' />
                     </View>
 
 

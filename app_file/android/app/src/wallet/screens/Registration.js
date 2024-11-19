@@ -172,6 +172,7 @@ const Signup = ({}) => {
                     storeData('email', response.user.email)
                     storeData('phone', response.user.phone)
                     storeData('user_id', response.id)
+                    storeData('user', JSON.stringify(response.user)) 
                     openModal()
                 }else{
                     if(response.data === 'duplicate email'){

@@ -1,10 +1,16 @@
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
-import NetworSVG from '../../assets/network-cellular-connected-svgrepo-com.svg'
+// import NetworSVG from '../../assets/network-cellular-connected-svgrepo-com.svg'
 import CloseSVG from '../../assets/close-square-svgrepo-com.svg'
 import { useState } from 'react';
 import { useEffect } from 'react';
-
+import { getNetworkProvider } from '../../reusables/Network';
+import NetworkSVG from '../../assets/network-svgrepo-com.svg'
+import MtnSVG from '../../assets/mtn.svg'
+import GloSVG from '../../assets/glo.svg'
+import EtisalatSVG from '../../assets/etisalat.svg'
+import AirtelSVG from '../../assets/airtel.svg'
+import axios from 'axios';
 //import Header from './components/Header';
 //import Navigation from './components/Navigation';
 //import Body from './components/Body';
@@ -18,6 +24,10 @@ export default function Airtime() {
   let [amount, setAmount] = useState(0);
   let [number, setNumber] = useState(0);
   let [payBtn, setPayBtn] = useState(0);
+  let [service, setservice] = useState('');
+  let [line, setline] = useState(
+    <NetworkSVG height={30} width={30} />
+  );
 
   let DATA = [
     {amount: 50, id: 1},
@@ -60,6 +70,60 @@ export default function Airtime() {
 
   }
 
+useEffect(() => {
+  if(number.length === 11){
+    let network = getNetworkProvider(number);
+    console.log(network)
+    if(network.toLowerCase() === 'mtn'){
+      setline(<MtnSVG height={40} width={40} />)
+      setservice('mtn')
+    }else if(network.toLowerCase() === 'glo'){
+      setline(<GloSVG height={40} width={40} />)
+      setservice('glo')
+    }else if(network.toLowerCase() === '9mobile'){
+      setline(<EtisalatSVG height={40} width={40} />)
+      setservice('9mobile')
+    }else if(network.toLowerCase() === 'airtel'){
+      setline(<AirtelSVG height={40} width={40} />)
+      setservice('airtel')
+    }
+  }else{
+    setline(
+      <NetworkSVG height={30} width={30} />
+    )
+  }
+ 
+
+}, [number])
+
+function generateRequestID(extraString = "") {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(now.getDate()).padStart(2, "0");
+  const hour = String(now.getHours()).padStart(2, "0");
+  const minute = String(now.getMinutes()).padStart(2, "0");
+
+  const requestId = `${year}${month}${day}${hour}${minute}${extraString}`;
+  return requestId;
+}
+
+
+
+function recharge_card(params) {
+  let request_id = generateRequestID("ad8ef08acd8fc0f")
+  axios.post('https://vtpass.com/api/pay', {
+    request_id,
+    serviceID: service,
+    amount: amount,
+    phone: number
+  })
+  .then((result) => {
+    console.log(result)
+  })
+  .catch(err => console.log(err))
+}
+
   return (
 
     <>
@@ -74,7 +138,7 @@ export default function Airtime() {
 
             <View style={{height: 40, width: '100%', paddingLeft: 10, paddingRight: 10, paddingTop: 10}}>
               <TouchableOpacity onPress={closeModal} style={{width: 50, height: 50}}>
-                <CloseSVG height={25} width={25} />
+                <CloseSVG height={30} width={30} />
               </TouchableOpacity>
             </View>
 
@@ -98,7 +162,7 @@ export default function Airtime() {
 
             </ScrollView>
 
-            <TouchableOpacity style={{height: 50, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <TouchableOpacity style={{height: 50, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}} onPress={e=>recharge_card()}>
               <Text>Pay Now</Text>
             </TouchableOpacity>
 
@@ -109,9 +173,9 @@ export default function Airtime() {
 
       <View style={styles.contactInput}>
         <View style={styles.network}>
-          <NetworSVG width={25} height={25}  />
+          {line}
         </View>
-        <TextInput onChangeText={text => setNumber(text)} keyboardType='numeric' placeholder='Phone number' maxLength={10} style={styles.input0} />
+        <TextInput onChangeText={text => setNumber(text)} keyboardType='numeric' placeholder='Phone number' maxLength={11} style={styles.input0} />
 
       </View>
 
